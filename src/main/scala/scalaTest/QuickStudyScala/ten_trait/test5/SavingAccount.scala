@@ -1,9 +1,9 @@
-package scalaTest.QuickStudyScala.ten_trait.test4
+package scalaTest.QuickStudyScala.ten_trait.test5
 
 /**
  * Created by Administrator on 下午 10:48.
  */
-class SavingAccount extends Account with Logger{
+class SavingAccount extends Logger{
   var balance:Double=100
 
 

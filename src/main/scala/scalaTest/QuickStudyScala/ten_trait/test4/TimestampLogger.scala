@@ -5,8 +5,8 @@ import java.util.Date
 /**
  * Created by Administrator on 下午 11:19.
  */
-trait TimestampLogger extends Logged{
-  override def log(msg:String): Unit ={
+trait TimestampLogger extends Logger{
+  abstract override def log(msg:String): Unit ={
     super.log(new Date() +" "+msg)
   }
 
