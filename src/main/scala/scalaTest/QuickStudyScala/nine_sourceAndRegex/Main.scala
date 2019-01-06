@@ -9,7 +9,7 @@ object Main {
     val person: Person = new Person("liming",123)
     import java.io._
     val stream: ObjectOutputStream = new ObjectOutputStream(new FileOutputStream("E:\\tmp\\testSerializable"))
-    stream.writeObject(person)7
+    stream.writeObject(person)
     stream.close()
     val inputStream: ObjectInputStream = new ObjectInputStream(new FileInputStream("E:\\tmp\\testSerializable"))
     val person1: Person = inputStream.readObject().asInstanceOf[Person]
