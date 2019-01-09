@@ -1,9 +1,13 @@
 package scalaTest.QuickStudyScala.thirteen
 
+import java.util.Properties
+
 import scala.collection
 import scala.collection.immutable.IndexedSeq
+import scala.collection.parallel.immutable.ParSeq
 import scala.collection.{mutable, SortedSet}
 import scala.collection.mutable.ArrayBuffer
+import scala.io.{BufferedSource, Source}
 
 /**
  * Created by Administrator on 下午 6:03.
@@ -179,8 +183,27 @@ object Test1 {
 //    val all2: List[(Double, Int)] = prices2.zipAll(quantities, 0.0 , 5) //第二个值5 为当quantities的元素较少时用5与prices2进行拉链操作
 //    println(all2)//List((5.0,10), (20.0,2), (0.0,1))
     //==========zipWithIndex  方法返回对偶的列表  其中每个对偶中第二个组成部分是每个元素的下标
-    val index: IndexedSeq[(Char, Int)] = "Scala".zipWithIndex
-    println(index)//Vector((S,0), (c,1), (a,2), (l,3), (a,4))
+//    val index: IndexedSeq[(Char, Int)] = "Scala".zipWithIndex
+//    println(index)//Vector((S,0), (c,1), (a,2), (l,3), (a,4))
+
+    //=============迭代器
+//    val file: BufferedSource = Source.fromFile("e:\\sparktest.txt","gbk")
+//    val buffered: BufferedIterator[Char] = file.buffered
+//    while(buffered.hasNext){
+//      println("2222222222222")//一个回车代表两行
+//      buffered.next()
+//    }
+
+    //============scala上的集合 与java上的集合之间的互转操作=========隐式转换
+    //把java上的java.util.Properties转换为scala上的map
+    import scala.collection.JavaConversions.propertiesAsScalaMap//注意如果没有用到的话是显示灰色的，有用到隐式转换的话，会变成黑色
+    val props:scala.collection.mutable.Map[String,String]=System.getProperties
+
+    //=============并行集合
+    for(i<-(0 until 20).par)print(s"$i")//可以通过对要遍历的集合应用.par并行化for循环
+    //012347891011121314151617181956  注意数字是按照作用于该任务的线程产出的顺序输出的   而在for  yield中。结果是依次组装的
+    val strings: ParSeq[String] = for (i <- (0 until 20).par) yield i + " "
+    println(strings)//ParVector(0 , 1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 , 9 , 10 , 11 , 12 , 13 , 14 , 15 , 16 , 17 , 18 , 19 )
 
 
   }
