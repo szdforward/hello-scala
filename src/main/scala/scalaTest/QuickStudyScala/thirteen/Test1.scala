@@ -1,6 +1,7 @@
 package scalaTest.QuickStudyScala.thirteen
 
 import scala.collection
+import scala.collection.immutable.IndexedSeq
 import scala.collection.{mutable, SortedSet}
 import scala.collection.mutable.ArrayBuffer
 
@@ -87,7 +88,7 @@ object Test1 {
 //    println(digits.diff(my))//Set(1, 2)
 
     //==========常用方法测试
-    val ints: mutable.LinkedHashSet[Int] = mutable.LinkedHashSet(12,345,567,22,45,1,864)
+//    val ints: mutable.LinkedHashSet[Int] = mutable.LinkedHashSet(12,345,567,22,45,1,864)
 //    println(ints.head)//12
 //    println(ints.headOption)//Some(12)  以Option的方法返回第一个 元素
 //    println(ints.last)//864
@@ -113,24 +114,74 @@ object Test1 {
 //    println(ints.takeRight(4))//Set(22, 45, 1, 864)  得到从后面取的4个元素
 //    println(ints.dropRight(4))//Set(12, 345, 567)   与上面的对应，得到去掉后面4个元素之后的剩下的元素
 //
-    val grouped: Iterator[mutable.LinkedHashSet[Int]] = ints.grouped(2)
-    while(grouped.hasNext){
-      println(grouped.next())
-}
+//    val grouped: Iterator[mutable.LinkedHashSet[Int]] = ints.grouped(2)
+//    while(grouped.hasNext){
+//      println(grouped.next())
+//}
     //结果：  返回的是一个迭代器 每一个元素为一个Set集合   第一个元素是下标为0 until n的集合，第二个元素是n until 2n的集合  依次往后，直到最后一个元素
 //    Set(12, 345)
 //    Set(567, 22)
 //    Set(45, 1)
 //    Set(864)
-    val sliding: Iterator[mutable.LinkedHashSet[Int]] = ints.sliding(4)
-    while (sliding.hasNext) {
-      println(sliding.next())
-    }
+//    val sliding: Iterator[mutable.LinkedHashSet[Int]] = ints.sliding(4)
+//    while (sliding.hasNext) {
+//      println(sliding.next())
+//    }
     //结果：  返回的是一个迭代器 每一个元素为一个Set集合   第一个元素是下标为0 until n的集合，第二个元素是1 until n+1的集合  依次往后(sliding是滑行的意思，一个个的往后滑)，直到最后一个元素
 //    Set(12, 345, 567, 22)
 //    Set(345, 567, 22, 45)
 //    Set(567, 22, 45, 1)
 //    Set(22, 45, 1, 864)
+//    val ab: ArrayBuffer[String] = ArrayBuffer("Peter","Paul","Mary")
+//    //transform的使用  当场执行，而不是交出新的集合  它应用于可变集合  并将每个元素都替换成函数的结果
+//    ab.transform(_.toUpperCase)
+//    println(ab)//ArrayBuffer(PETER, PAUL, MARY)
+
+    //collect  意思为收集，收集那些被定义的所有参数的函数值的集合
+//    val collect: IndexedSeq[Int] = "-3+4".collect{case '+' =>1;case '-' => -1}
+//    println(collect)//Vector(-1, 1)
+
+    //groupBy  交出一个映射  它的键是函数求值后的值，而值是那些函数调用每个元素得到的此映射的键的那些元素
+//    val ab1: ArrayBuffer[String] = ArrayBuffer("Peter", "Paul",  "Mary", "Abced","amy")
+//    val by: Map[String, ArrayBuffer[String]] = ab1.groupBy(_.substring(0,1).toUpperCase)
+//    println(by)//Map(M -> ArrayBuffer(Mary), P -> ArrayBuffer(Peter, Paul), A -> ArrayBuffer(Abced, amy))
+
+    //foldLeft的使用
+//    val left: Int = List(1,4,2,9).foldLeft(0)(_+_)//0+1+4+2+9=16
+//    println(left)//16
+
+    //=====================使用/: 来代表foldLeft
+//    (Map[Char,Int]() /: "Mispi"){
+//      (m,c)=>m+(c->(m.getOrElse(c,0)+1))
+//    }
+    //等同于：
+//    val left1: Map[Char, Int] = "Mispi".foldLeft(Map[Char,Int]()) {
+//      (m, c) => m + (c -> (m.getOrElse(c, 0) + 1))
+//    }
+//    println(left1)//Map(M -> 1, i -> 2, s -> 1, p -> 1)
+
+    //scanLeft和scanRight方法将折叠和映射操作结合在一起，你将得到的包含所有中间结果的集合
+//    val left2: List[Int] = List(1,2,3,4,5).scanLeft(0)(_+_)
+//    println(left2)//List(0, 1, 3, 6, 10, 15)
+
+    //====================================拉链操作 zip
+//    val prices=List(5.0,20.0,9.5)//商品的价格
+//    val quantities=List(10,2,1)//商品的数量
+//    val tuples: List[(Double, Int)] = prices zip quantities
+//    println(tuples)//List((5.0,10), (20.0,2), (9.5,1))
+//    //计算所有商品的花费
+//    val sum1: Double = tuples.map(x=>x._1*x._2).sum
+//    println(sum1)//99.5
+//    val prices2 = List(5.0, 20.0)
+//    val quantities2 = List(10, 2) //商品的数量
+//    val all: List[(Double, Int)] = prices.zipAll(quantities2, 0.0 , 5)//第一个值0.0 为当prices的元素较少时用0.0与quantities2进行拉链操作
+//    println(all)//List((5.0,10), (20.0,2), (9.5,5))
+//    val all2: List[(Double, Int)] = prices2.zipAll(quantities, 0.0 , 5) //第二个值5 为当quantities的元素较少时用5与prices2进行拉链操作
+//    println(all2)//List((5.0,10), (20.0,2), (0.0,1))
+    //==========zipWithIndex  方法返回对偶的列表  其中每个对偶中第二个组成部分是每个元素的下标
+    val index: IndexedSeq[(Char, Int)] = "Scala".zipWithIndex
+    println(index)//Vector((S,0), (c,1), (a,2), (l,3), (a,4))
+
 
   }
 
